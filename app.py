@@ -37,14 +37,13 @@ prev_candle = st.selectbox("Last Completed Candle:", ["🟢 Green (Bullish)", "�
 
 st.markdown("---")
 
-# 4. Smart Mathematical Prediction Logic
+# 4. Smart Mathematical Prediction Logic (Fixed Syntax Error)
 if st.button("RUN HIGH-ACCURACY TIME ANALYSIS 🚀"):
     st.info(f"Analyzing mathematical patterns for {selected_pair}...")
     
     # Generate a unique mathematical seed using target time and pair string
-    # This prevents the loop of getting the exact same percentage repeatedly
     string_src = f"{target_time}-{selected_pair}-{rsi_input}-{macd_input}"
-    hash_val = int(hashlib.mdigest = hashlib.sha256(string_src.encode()).hexdigest(), 16)
+    hash_val = int(hashlib.sha256(string_src.encode()).hexdigest(), 16)
     time_factor = (hash_val % 30) - 15  # Dynamic variance between -15 and +15
     
     # Core strategy scoring
