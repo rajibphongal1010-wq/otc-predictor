@@ -1,10 +1,9 @@
 import streamlit as st
-import numpy as np
 
 # Page configuration for a premium look
 st.set_page_config(page_title="AI OTC Predictor Pro", page_icon="📈", layout="centered")
 
-# Custom CSS for Dark Premium Theme & Better UI
+# Custom CSS for Dark Premium Theme & Better UI (Fixed Parameter)
 st.markdown("""
     <style>
     .main { background-color: #0e1117; color: #ffffff; }
@@ -26,15 +25,15 @@ st.markdown("""
         border-radius: 12px; text-align: center; color: #f87171; font-size: 22px; font-weight: bold;
     }
     </style>
-""", unsafe_style_html=True)
+""", unsafe_allow_html=True)
 
 # Application Header
-st.markdown("<h1 style='text-align: center; color: #00ffcc;'>⚡ AI OTC PREDICTOR PRO</h1>", unsafe_style_html=True)
-st.markdown("<p style='text-align: center; color: #9ca3af;'>Advanced Mathematical Trend Analysis Bot</p>", unsafe_style_html=True)
+st.markdown("<h1 style='text-align: center; color: #00ffcc;'>⚡ AI OTC PREDICTOR PRO</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #9ca3af;'>Advanced Mathematical Trend Analysis Bot</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # 1. Selection Layout
-st.markdown("<h3 style='color: #00ffcc;'>🎯 Configuration</h3>", unsafe_style_html=True)
+st.markdown("<h3 style='color: #00ffcc;'>🎯 Configuration</h3>", unsafe_allow_html=True)
 
 pairs_list = [
     "NZD/CHF (OTC)", "USD/IDR (OTC)", "USD/BDT (OTC)", "USD/DZD (OTC)", 
@@ -46,7 +45,7 @@ pairs_list = [
 selected_pair = st.selectbox("Select Asset Pair:", pairs_list)
 
 # 2. Manual Data Inputs (Mathematical Accuracy)
-st.markdown("<h3 style='color: #00ffcc;'>📊 Live Indicator Values</h3>", unsafe_style_html=True)
+st.markdown("<h3 style='color: #00ffcc;'>📊 Live Indicator Values</h3>", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
@@ -90,7 +89,7 @@ if st.button("RUN ALGORITHM ANALYSIS 🚀"):
         put_score += 5
         call_score -= 5
         
-    # Ensuring values stay within realistic probability ranges (65% to 78%)
+    # Ensuring values stay within realistic probability ranges
     call_chance = max(20, min(85, call_score))
     put_chance = max(20, min(85, put_score))
     
@@ -100,7 +99,7 @@ if st.button("RUN ALGORITHM ANALYSIS 🚀"):
     put_percentage = round((put_chance / total) * 100, 2)
     
     # Displaying UI based on higher probability
-    st.markdown("<h3 style='color: #00ffcc;'>🎯 Execution Signal:</h3>", unsafe_style_html=True)
+    st.markdown("<h3 style='color: #00ffcc;'>🎯 Execution Signal:</h3>", unsafe_allow_html=True)
     
     if call_percentage > put_percentage:
         st.markdown(f"<div class='result-box-call'>📈 SIGNAL: CALL (UP)<br><span style='font-size: 16px; color: white;'>Asset: {selected_pair}</span></div>", unsafe_style_html=True)
@@ -108,11 +107,11 @@ if st.button("RUN ALGORITHM ANALYSIS 🚀"):
         st.markdown(f"<div class='result-box-put'>📉 SIGNAL: PUT (DOWN)<br><span style='font-size: 16px; color: white;'>Asset: {selected_pair}</span></div>", unsafe_style_html=True)
         
     # Visualizing breakdown metrics
-    st.markdown("<br>", unsafe_style_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     m_col1, m_col2 = st.columns(2)
     with m_col1:
-        st.markdown(f"<div class='metric-box'><h4 style='color: #34d399;'>🟢 CALL CHANCE</h4><h2>{call_percentage}%</h2></div>", unsafe_style_html=True)
+        st.markdown(f"<div class='metric-box'><h4 style='color: #34d399;'>🟢 CALL CHANCE</h4><h2>{call_percentage}%</h2></div>", unsafe_allow_html=True)
     with m_col2:
-        st.markdown(f"<div class='metric-box'><h4 style='color: #f87171;'>🔴 PUT CHANCE</h4><h2>{put_percentage}%</h2></div>", unsafe_style_html=True)
+        st.markdown(f"<div class='metric-box'><h4 style='color: #f87171;'>🔴 PUT CHANCE</h4><h2>{put_percentage}%</h2></div>", unsafe_allow_html=True)
         
     st.warning("⚠️ Note: AI is using RSI Overbought/Oversold criteria. Please match this with a 1-Min Quotex Demo Chart before testing.")
