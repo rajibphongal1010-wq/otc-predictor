@@ -1,5 +1,3 @@
 streamlit
-yfinance
-pandas
+opencv-python-headless
 numpy
-pytz
