@@ -35,10 +35,8 @@ st.title("🎯 HIGH-POWER AI VISION CANDLESTICK SCANNER")
 st.write("Real AI analysis using genuine Multi-Modal Computer Vision. No pixel hacks.")
 st.markdown("---")
 
-# Sidebar for Genuine Google API Authentication
-st.sidebar.subheader("🔑 Secure AI Core")
-api_keyapi_key = "AQ.Ab8RN6Lmp9DHVJIIjumC4cZDRyPp5tyI1SR1BtHpuc9-RqRbJQ"
--RqRbJQ
+# YAHAN AAPKI KEY EKDAM PERMANENT SET HO GAYI HAI COMA OR QUOTES KE SATH
+api_key = "AQ.Ab8RN6Lmp9DHVJIIjumC4cZDRyPp5tyI1SR1BtHpuc9-RqRbJQ"
 
 uploaded_file = st.file_uploader("📥 Drop chart screenshot here:", type=["png", "jpg", "jpeg"])
 
@@ -50,7 +48,7 @@ if uploaded_file is not None:
         st.subheader("📷 Control Matrix")
         st.image(image, use_container_width=True)
         
-        # All exact pairs extracted from user screenshots 1000123652.jpg and 1000123653.jpg
+        # All exact pairs extracted from user screenshots
         all_pairs = [
             "NZD/CHF (OTC)", "USD/IDR (OTC)", "USD/BDT (OTC)", "USD/DZD (OTC)", 
             "AUD/NZD (OTC)", "USD/EGP (OTC)", "CAD/JPY", "USD/PKR (OTC)", 
@@ -73,7 +71,7 @@ if uploaded_file is not None:
         
         if execute_btn:
             if not api_key:
-                st.error("❌ Please supply a valid Gemini API Key in the sidebar.")
+                st.error("❌ Please supply a valid Gemini API Key.")
             else:
                 try:
                     genai.configure(api_key=api_key)
