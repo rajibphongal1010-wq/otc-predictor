@@ -37,7 +37,8 @@ st.markdown("---")
 
 # Sidebar for Genuine Google API Authentication
 st.sidebar.subheader("🔑 Secure AI Core")
-api_key =AQ.Ab8RN6Lmp9DHVJIIjumC4cZDRyPp5tyI1SR1BtHpuc9-RqRbJQ
+api_keyapi_key = "AQ.Ab8RN6Lmp9DHVJIIjumC4cZDRyPp5tyI1SR1BtHpuc9-RqRbJQ"
+-RqRbJQ
 
 uploaded_file = st.file_uploader("📥 Drop chart screenshot here:", type=["png", "jpg", "jpeg"])
 
