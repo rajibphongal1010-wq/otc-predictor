@@ -1,10 +1,10 @@
 import streamlit as st
 from PIL import Image
-import numpy as np
+import google.generativeai as genai
 import time
 
 # Premium Dark Dashboard Config
-st.set_page_config(page_title="ANALYSIS CORE v3.0", page_icon="📊", layout="wide")
+st.set_page_config(page_title="REAL AI VISION CORE v4.0", page_icon="📈", layout="wide")
 
 # CSS matching 1000123790.jpg exactly with high fidelity layout
 st.markdown("""
@@ -69,138 +69,127 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🎛️ MULTI-CURRENCY TARGET STRUCTURE SCANNER")
-st.write("Upload chart screenshot, select currency pair, and set your manual candle execution window.")
+st.title("🧙‍♂️ MULTI-CURRENCY REAL AI VISION SCANNER")
+st.write("Powered by genuine Gemini 2.5 Multi-Modal Vision Processing Engine.")
 st.markdown("---")
 
-# 1. Image Upload
+# 1. API Key Setup in Control Panel
+st.sidebar.subheader("🔑 AI Authentication")
+api_key = st.sidebar.text_input("Enter Gemini API Key:", type="password")
+
+# 2. Image Upload
 uploaded_file = st.file_uploader("📥 Drag and drop or browse chart screenshot:", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     
-    # Grid Layout: Left side configuration inputs, Right side output panel
     col1, col2 = st.columns([1, 1.2])
     
     with col1:
         st.subheader("📷 Control Panel & Input")
         st.image(image, use_container_width=True)
         
-        # 💱 CURRENCY PAIR SELECTION OPTION ADDED HERE
+        # Currency Pair Options
         currency_pairs = [
             "EUR/USD (Forex Real)", "EUR/JPY (Forex Real)", "GBP/USD (Forex Real)", 
-            "USD/JPY (Forex Real)", "AUD/USD (Forex Real)", "USD/CAD (Forex Real)",
-            "EUR/USD (OTC)", "EUR/JPY (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)"
+            "USD/JPY (Forex Real)", "EUR/USD (OTC)", "EUR/JPY (OTC)"
         ]
         selected_pair = st.selectbox("💱 Select Uploaded Currency Pair:", currency_pairs)
         
-        # 🎯 MANUAL TIME SETTING OPTION
+        # Manual Target Time Input
         current_system_time = time.strftime("%H:%M")
-        target_time_input = st.text_input(
-            "🎯 Set Target Candle Time (e.g., 12:30, 15:45):", 
-            value=current_system_time,
-            help="Enter the exact future minute candle color prediction you want to analyze."
-        )
+        target_time_input = st.text_input("🎯 Set Target Candle Time (e.g., 12:30):", value=current_system_time)
         
-        trigger_analysis = st.button("🚀 EXECUTE MATHEMATICAL CHART ANALYSIS")
+        trigger_analysis = st.button("🚀 EXECUTE REAL AI VISION SCAN")
         
     with col2:
         st.subheader("🖥️ Core System Output")
         
         if trigger_analysis:
-            # Simulated telemetry processing delay
-            with st.spinner(f"Decoding matrix layers for {selected_pair} and calculating paths..."):
-                time.sleep(1.4)
-                
-            # Computational metrics extraction from raw array matrix
-            img_array = np.array(image)
-            metric_seed = int(np.mean(img_array))
-            
-            # Deterministic calculation path based on image variables and chosen pair
-            pair_hash = sum(ord(char) for char in selected_pair)
-            is_bullish_bias = ((metric_seed + pair_hash) % 2 == 0)
-            
-            bullish_percentage = 68 if is_bullish_bias else 32
-            bearish_percentage = 32 if is_bullish_bias else 68
-            
-            # Generating realistic exchange rates based on standard forex pricing
-            if "JPY" in selected_pair:
-                base_calc = 150.25 + ((metric_seed % 100) / 100)
-                sup_val = f"{base_calc:.3f}"
-                res_val = f"{base_calc + 0.350:.3f}"
+            if not api_key:
+                st.error("❌ Please enter your Gemini API Key in the sidebar first!")
             else:
-                base_calc = 1.0800 + ((metric_seed % 100) / 10000) if "EUR" in selected_pair else 1.2300 + ((metric_seed % 100) / 10000)
-                sup_val = f"{base_calc:.4f}"
-                res_val = f"{base_calc + 0.0035:.4f}"
-            
-            # --- PREMIUM DASHBOARD CONTAINER ---
-            st.markdown("<div class='dashboard-card'>", unsafe_allow_html=True)
-            
-            # Header block with user's customized target time badge and Asset name
-            st.markdown(f"<span class='time-badge'>{target_time_input}</span>", unsafe_allow_html=True)
-            st.markdown(f"<h3 style='margin: 0 0 5px 0; font-size: 20px; color:#ffffff;'>Analysis Result</h3>", unsafe_allow_html=True)
-            st.markdown(f"<span style='color: #8a8d93; font-size: 14px;'>Asset: {selected_pair}</span><div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
-            
-            # Twin Blocks for Bias Percentages
-            st.markdown(f"""
-                <div class='bias-container'>
-                    <div class='bias-box'>
-                        <div class='bullish-title'>↑ Bullish Bias</div>
-                        <div class='bullish-val'>{bullish_percentage}%</div>
-                    </div>
-                    <div class='bias-box'>
-                        <div class='bearish-title'>↓ Bearish Bias</div>
-                        <div class='bearish-val'>{bearish_percentage}%</div>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-            
-            # Data grid layout mapping user's inputs
-            if is_bullish_bias:
-                st.markdown(f"""
-                    <div class='data-row'><span class='data-label'>Trend</span><span class='data-value trend-green'>↗ Uptrend</span></div>
-                    <div class='data-row'><span class='data-label'>Current Pattern</span><span class='data-value'>Bullish Engulfing</span></div>
-                    <div class='data-row'><span class='data-label'>Support</span><span class='data-value'>{sup_val}</span></div>
-                    <div class='data-row'><span class='data-label'>Resistance</span><span class='data-value'>{res_val}</span></div>
-                    <div class='data-row'><span class='data-label'>Confidence</span><span class='data-value conf-medium'>✓ Medium</span></div>
-                """, unsafe_allow_html=True)
-                
-                # Dynamic response block explaining 'Why' for target time
-                st.markdown(f"""
-                    <div class='why-section'>
-                        <div class='why-title'>🧠 Why bullish for {target_time_input}?</div>
-                        <ul class='custom-bullet'>
-                            <li>Price current structural support line se reject hua hai.</li>
-                            <li>Bullish engulfing momentum window trigger ho chuka hai.</li>
-                            <li>Higher low format structure progression validation par chal raha hai.</li>
-                            <li>Immediate overhead resistance levels break hone ke behrad kareeb hai.</li>
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown(f"""
-                    <div class='data-row'><span class='data-label'>Trend</span><span class='data-value trend-red'>↘ Downtrend</span></div>
-                    <div class='data-row'><span class='data-label'>Current Pattern</span><span class='data-value'>Bearish Pin Bar</span></div>
-                    <div class='data-row'><span class='data-label'>Support</span><span class='data-value'>{sup_val}</span></div>
-                    <div class='data-row'><span class='data-label'>Resistance</span><span class='data-value'>{res_val}</span></div>
-                    <div class='data-row'><span class='data-label'>Confidence</span><span class='data-value conf-medium' style='color:#df4949;'>✓ Medium</span></div>
-                """, unsafe_allow_html=True)
-                
-                st.markdown(f"""
-                    <div class='why-section'>
-                        <div class='why-title'>🧠 Why bearish for {target_time_input}?</div>
-                        <ul class='custom-bullet'>
-                            <li>Price macro resistance zone block se deep reject hui hai.</li>
-                            <li>Overhead institutional supply distribution channel active ho raha hai.</li>
-                            <li>Lower high sequence structural hierarchy chart matrix par clear dikh rahi hai.</li>
-                            <li>Immediate target levels localized technical support areas ke pass focused hain.</li>
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
-                
-            st.markdown("</div>", unsafe_allow_html=True)
+                try:
+                    # Configuring Google GenAI with user's genuine API key
+                    genai.configure(api_key=api_key)
+                    model = genai.GenerativeModel('gemini-2.5-flash')
+                    
+                    with st.spinner("AI Engine is scanning candlesticks and visual geometry..."):
+                        
+                        # High fidelity technical prompt explicitly forcing structure validation
+                        prompt = f"""
+                        You are an expert financial market analyst. Analyze this chart image for the pair {selected_pair}.
+                        Perform real analysis on market structure, candlestick patterns (like Engulfing, Doji, Hammer), support/resistance lines, and price action psychology.
+                        Do NOT guess or base analysis on random pixel distribution. Give a probabilistic prediction for the upcoming candle at target time {target_time_input}.
+                        
+                        Return the result STRICTLY as a valid Python dictionary with the exact following keys for processing (do not wrap in markdown blocks, just the raw text):
+                        {{
+                            "bullish_bias": int (e.g. 68),
+                            "bearish_bias": int (e.g. 32),
+                            "trend": "Uptrend" or "Downtrend" or "Sideways",
+                            "pattern": "Name of pattern detected or 'None'",
+                            "support": "Detected price level or approximate decimal string",
+                            "resistance": "Detected price level or approximate decimal string",
+                            "confidence": "High" or "Medium" or "Low",
+                            "reasons": [list of 3-4 specific structural bullet points string explaining why in Hinglish language]
+                        }}
+                        """
+                        
+                        # Sending the prompt along with the raw uploaded chart image matrix to Google AI
+                        response = model.generate_content([prompt, image])
+                        
+                        # Parsing response data safely
+                        data = eval(response.text.strip().replace("```python", "").replace("```", ""))
+                        
+                        # --- PREMIUM DASHBOARD LAYOUT INJECTION ---
+                        st.markdown("<div class='dashboard-card'>", unsafe_allow_html=True)
+                        
+                        st.markdown(f"<span class='time-badge'>{target_time_input}</span>", unsafe_allow_html=True)
+                        st.markdown(f"<h3 style='margin: 0 0 5px 0; font-size: 20px; color:#ffffff;'>Analysis Result</h3>", unsafe_allow_html=True)
+                        st.markdown(f"<span style='color: #8a8d93; font-size: 14px;'>Asset: {selected_pair} (Real AI Analysis)</span><div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
+                        
+                        # Twin Blocks for Bias Percentages from AI Model
+                        st.markdown(f"""
+                            <div class='bias-container'>
+                                <div class='bias-box'>
+                                    <div class='bullish-title'>↑ Bullish Bias</div>
+                                    <div class='bullish-val'>{data['bullish_bias']}%</div>
+                                </div>
+                                <div class='bias-box'>
+                                    <div class='bearish-title'>↓ Bearish Bias</div>
+                                    <div class='bearish-val'>{data['bearish_bias']}%</div>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Data Rows mapping
+                        trend_class = "trend-green" if "Up" in data['trend'] else "trend-red"
+                        st.markdown(f"""
+                            <div class='data-row'><span class='data-label'>Trend</span><span class='data-value {trend_class}'> {data['trend']}</span></div>
+                            <div class='data-row'><span class='data-label'>Current Pattern</span><span class='data-value'>{data['pattern']}</span></div>
+                            <div class='data-row'><span class='data-label'>Support</span><span class='data-value'>{data['support']}</span></div>
+                            <div class='data-row'><span class='data-label'>Resistance</span><span class='data-value'>{data['resistance']}</span></div>
+                            <div class='data-row'><span class='data-label'>Confidence</span><span class='data-value conf-medium'>{data['confidence']}</span></div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Dynamic Why Section based on actual AI inference
+                        bias_direction = "bullish" if data['bullish_bias'] >= data['bearish_bias'] else "bearish"
+                        st.markdown(f"""
+                            <div class='why-section'>
+                                <div class='why-title'>🧠 Why {bias_direction} for {target_time_input}?</div>
+                                <ul class='custom-bullet'>
+                        """)
+                        for r in data['reasons']:
+                            st.markdown(f"<li>{r}</li>", unsafe_allow_html=True)
+                        st.markdown("</ul></div>", unsafe_allow_html=True)
+                        
+                        st.markdown("</div>", unsafe_allow_html=True)
+                        
+                except Exception as e:
+                    st.error(f"⚠️ Connection Error or Invalid Output Format: {str(e)}")
+                    st.warning("Make sure your API key is valid and you uploaded a clear chart image.")
         else:
-            st.info("💡 Control Panel mein Asset select karein, apna Target Time set karein aur 'EXECUTE MATHEMATICAL CHART ANALYSIS' par click karein.")
+            st.info("💡 API Key daalein, Asset aur Target Time set karein, aur execute button dabayein.")
 
 st.markdown("---")
-st.caption("Educational Evaluation Pipeline Module • All extracted patterns reflect probabilities generated strictly from static image matrices. Past behavior is not a guarantee of future outcomes.")
+st.caption("Educational AI Multi-Modal Engine • This module parses visual inputs through external neural network endpoints.")
