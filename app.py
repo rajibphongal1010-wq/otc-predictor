@@ -11,8 +11,8 @@ import time
 # Premium Dark Layout Configuration
 st.set_page_config(page_title="CORE GPT-4o VISION v6.4", page_icon="📉", layout="wide")
 
-# API KEY (Streamlit secrets se secure tarike se uthayega)
-OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY", "")
+# ✅ MAINE AAPKI API KEY YAHAN DIRECT SET KAR DI HAI TAAKI ERROR NA AAYE
+OPENAI_API_KEY = "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"
 
 # UI styling matching premium dark trading dashboard
 st.markdown("""
@@ -77,7 +77,7 @@ if uploaded_file is not None:
             "USD/NGN (OTC)", "EUR/CAD", "USD/JPY"
         ]
         selected_pair = st.selectbox("💱 Select Trade Asset:", sorted(all_pairs))
-        target_time = st.text_input("🎯 Set Target Candle Time (with AM/PM):", value="11:09 AM")
+        target_time = st.text_input("🎯 Set Target Candle Time (with AM/PM):", value="01:40 AM")
         execute_btn = st.button("🚀 RUN CHATGPT PRICE ACTION ANALYSIS")
         
     with col2:
@@ -85,7 +85,7 @@ if uploaded_file is not None:
         
         if execute_btn:
             if not OPENAI_API_KEY:
-                st.error("❌ API Key missing. Please set OPENAI_API_KEY in Streamlit Secrets Dashboard.")
+                st.error("❌ API Key missing in code.")
             else:
                 try:
                     client = openai.OpenAI(api_key=OPENAI_API_KEY)
@@ -100,15 +100,15 @@ if uploaded_file is not None:
                         
                         Analyze for target time window: {target_time}.
                         
-                        Your output MUST be a valid JSON object ONLY.
+                        Your output MUST be a valid JSON object ONLY. Do not wrap in markdown or backticks.
                         Format:
                         {{
                             "bullish_bias": <int_percentage>,
                             "bearish_bias": <int_percentage>,
                             "trend": "<Uptrend/Downtrend/Sideways>",
                             "pattern": "<Exact candlestick pattern name>",
-                            "macd_scenario": "<State of MACD - e.g. Bullish Crossover above 0 line / Bearish Signal Cross>",
-                            "stochastic_scenario": "<State of Stochastic - e.g. Oversold K-Line cross above 20 / Overbought Reversal>",
+                            "macd_scenario": "<State of MACD - e.g. Bullish Crossover / Bearish Signal Cross>",
+                            "stochastic_scenario": "<State of Stochastic - e.g. Oversold K-Line cross / Overbought Reversal>",
                             "support": "<Support level>",
                             "resistance": "<Resistance level>",
                             "confidence": "<High/Medium/Low>",
@@ -156,7 +156,7 @@ if uploaded_file is not None:
                             <div class='data-row'><span class='data-label'>Trend Matrix</span><span class='data-value {t_color}'>{data['trend']}</span></div>
                             <div class='data-row'><span class='data-label'>Candlestick Pattern</span><span class='data-value'>{data['pattern']}</span></div>
                             <div class='data-row'><span class='data-label'>📊 Calculated MACD State</span><span class='data-value' style='color:#5383ec;'>{data['macd_scenario']}</span></div>
-                            <div class='data-row'><span class='data-label'>跌 Stochastic Oscillator</span><span class='data-value' style='color:#f1c40f;'>{data['stochastic_scenario']}</span></div>
+                            <div class='data-row'><span class='data-label'>📉 Stochastic Oscillator</span><span class='data-value' style='color:#f1c40f;'>{data['stochastic_scenario']}</span></div>
                             <div class='data-row'><span class='data-label'>Support Zone</span><span class='data-value'>{data['support']}</span></div>
                             <div class='data-row'><span class='data-label'>Resistance Zone</span><span class='data-value'>{data['resistance']}</span></div>
                             <div class='data-row'><span class='data-label'>AI Confidence</span><span class='data-value conf-badge'>{data['confidence']}</span></div>
@@ -171,7 +171,7 @@ if uploaded_file is not None:
                 except Exception as e:
                     st.error(f"ChatGPT Analysis Error: {str(e)}")
 
-# 🕒 BACKGROUND LOOP FOR LIVE CLOCK (Runs continuously without breaking input fields)
+# 🕒 BACKGROUND LOOP FOR LIVE CLOCK
 while True:
     current_ist = datetime.datetime.now(IST).strftime("%I:%M:%S %p")
     clock_placeholder.markdown(f"""
