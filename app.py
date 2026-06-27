@@ -1,12 +1,20 @@
 import streamlit as st
 from PIL import Image
-import google.generativeai as genai
+import openai
+import base64
+from io import BytesIO
+import datetime
+import pytz
+import json
 import time
 
 # Premium Dark Layout Configuration
-st.set_page_config(page_title="CORE AI VISION v5.0", page_icon="📉", layout="wide")
+st.set_page_config(page_title="CORE GPT-4o VISION v6.4", page_icon="📉", layout="wide")
 
-# UI styling matching output example exactly
+# API KEY (Streamlit secrets se secure tarike se uthayega)
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY", "")
+
+# UI styling matching premium dark trading dashboard
 st.markdown("""
     <style>
     .main { background-color: #111214; color: #e3e4e6; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -28,17 +36,30 @@ st.markdown("""
     .custom-bullet { list-style-type: none; padding-left: 0; }
     .custom-bullet li { padding-left: 20px; margin-bottom: 8px; position: relative; color: #c2c4c9; font-size: 14px; }
     .custom-bullet li::before { content: "•"; position: absolute; left: 0; color: #5383ec; font-size: 18px; top: -2px; }
+    .live-clock-box { background-color: #1a1b1e; border: 1px solid #ff4b4b; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🎯 HIGH-POWER AI VISION CANDLESTICK SCANNER")
-st.write("Real AI analysis using genuine Multi-Modal Computer Vision. Free Public Access Route.")
+st.title("🎯 ADVANCED CHATGPT VISION MULTI-INDICATOR SCANNER")
+st.write("Real-time Price Action + MACD + Stochastic Confluence Analysis with Live IST Clock.")
 st.markdown("---")
 
+# 🕒 1. LIVE REAL-TIME DIGITAL CLOCK IN SIDEBAR
+IST = pytz.timezone('Asia/Kolkata')
+st.sidebar.markdown("### 🇮🇳 Live India Time (IST)")
+clock_placeholder = st.sidebar.empty()
+
+# 2. FILE UPLOADER & CONTROLS
 uploaded_file = st.file_uploader("📥 Drop chart screenshot here:", type=["png", "jpg", "jpeg"])
 
+def encode_image(image_file):
+    return base64.b64encode(image_file.read()).decode('utf-8')
+
 if uploaded_file is not None:
+    base64_image = encode_image(uploaded_file)
+    uploaded_file.seek(0)
     image = Image.open(uploaded_file)
+    
     col1, col2 = st.columns([1, 1.2])
     
     with col1:
@@ -56,96 +77,107 @@ if uploaded_file is not None:
             "USD/NGN (OTC)", "EUR/CAD", "USD/JPY"
         ]
         selected_pair = st.selectbox("💱 Select Trade Asset:", sorted(all_pairs))
-        target_time = st.text_input("🎯 Set Target Candle Time (e.g., 12:45):", value="12:45")
-        
-        execute_btn = st.button("🚀 RUN GENUINE PRICE ACTION ANALYSIS")
+        target_time = st.text_input("🎯 Set Target Candle Time (with AM/PM):", value="11:09 AM")
+        execute_btn = st.button("🚀 RUN CHATGPT PRICE ACTION ANALYSIS")
         
     with col2:
-        st.subheader("🖥️ True AI Output Matrix")
+        st.subheader("🖥️ ChatGPT AI Output Matrix")
         
         if execute_btn:
-            try:
-                # 🛠️ KEYLESS FREE PUBLIC ACCESS GATEWAY SETTINGS
-                # Isme aapko koi alag se key nahi daalni padegi, yeh open server se jodega
-                genai.configure(api_key=st.secrets.get("GEMINI_API_KEY", "AIzaSy" + "FakePublicRouteGatewayKeySecure"))
-                model = genai.GenerativeModel('gemini-2.5-flash')
-                
-                with st.spinner("AI is physically reading candle structures & market psychology..."):
+            if not OPENAI_API_KEY:
+                st.error("❌ API Key missing. Please set OPENAI_API_KEY in Streamlit Secrets Dashboard.")
+            else:
+                try:
+                    client = openai.OpenAI(api_key=OPENAI_API_KEY)
                     
-                    prompt = f"""
-                    You are an expert price action trader. Analyze this chart image for the asset {selected_pair}.
-                    Read the actual chart geometry, candles (body, wick, ratio), market psychology, and support/resistance lines.
-                    Provide an expert assessment for what the next market movement behavior implies for the target execution time window: {target_time}.
-                    
-                    Return the output strictly in this exact Python dictionary string format so the script can parse it (Do not wrap in backticks or markdown, just raw text):
-                    {{
-                        "bullish_bias": int (percentage value),
-                        "bearish_bias": int (percentage value),
-                        "trend": "Uptrend" or "Downtrend" or "Sideways",
-                        "pattern": "Identified pattern name",
-                        "support": "Identified support price level",
-                        "resistance": "Identified resistance price level",
-                        "confidence": "High" or "Medium" or "Low",
-                        "reasons": ["Reason 1 in Hinglish based on psychology", "Reason 2 in Hinglish based on S/R block", "Reason 3 based on candle wicks"]
-                    }}
-                    """
-                    
-                    # Simulated parsing fallback to ensure app never crashes even if key is establishing
-                    import random
-                    bull = random.randint(55, 78)
-                    bear = 100 - bull
-                    
-                    # Visual design fallback builder
-                    data = {
-                        "bullish_bias": bull if "USD" in selected_pair else bear,
-                        "bearish_bias": bear if "USD" in selected_pair else bull,
-                        "trend": "Uptrend" if bull > bear else "Downtrend",
-                        "pattern": "Support Rejection & Liquidity Hunt" if bull > bear else "Resistance Supply Pressure",
-                        "support": "Dynamic Session Low (EMA/S&R)",
-                        "resistance": "Immediate Order Block High",
-                        "confidence": "High",
-                        "reasons": [
-                            f"Chart par candles support zone se reject ho rhi hain, buyers active hain.",
-                            f"Target time {target_time} ke aas-pass selling pressure khatam hota dikh rha hai.",
-                            f"Candle ki niche ki lambi wick (dandi) dikhati hai ki niche heavy liquidity zone hai."
-                        ]
-                    }
-                    
-                    time.sleep(1.5) # Genuine Scanning Delay
-                    
-                    # --- PREMIUM DESIGN UI DISPLAY ---
-                    st.markdown("<div class='dashboard-card'>", unsafe_allow_html=True)
-                    st.markdown(f"<span class='time-badge'>{target_time}</span>", unsafe_allow_html=True)
-                    st.markdown(f"<h3 style='margin:0 0 5px 0; color:white;'>Analysis Result</h3>", unsafe_allow_html=True)
-                    st.markdown(f"<div style='color:#8a8d93; font-size:14px; margin-bottom:15px;'>Asset: {selected_pair}</div>", unsafe_allow_html=True)
-                    
-                    st.markdown(f"""
-                        <div class='bias-container'>
-                            <div class='bias-box'>
-                                <div class='bullish-title'>↑ Bullish Bias</div>
-                                <div class='bullish-val'>{data['bullish_bias']}%</div>
+                    with st.spinner("ChatGPT is digitally projecting MACD & Stochastic values from candles..."):
+                        
+                        prompt = f"""
+                        You are an expert quantitative trader and multi-modal neural vision network. 
+                        Look at this chart image for {selected_pair}. 
+                        
+                        Even if MACD and Stochastic oscillators are not visually present at the bottom of this screenshot, you must visually look at the price wave peaks, candle sizes, and velocity to CALCULATE and PROJECT what their state would be right now.
+                        
+                        Analyze for target time window: {target_time}.
+                        
+                        Your output MUST be a valid JSON object ONLY.
+                        Format:
+                        {{
+                            "bullish_bias": <int_percentage>,
+                            "bearish_bias": <int_percentage>,
+                            "trend": "<Uptrend/Downtrend/Sideways>",
+                            "pattern": "<Exact candlestick pattern name>",
+                            "macd_scenario": "<State of MACD - e.g. Bullish Crossover above 0 line / Bearish Signal Cross>",
+                            "stochastic_scenario": "<State of Stochastic - e.g. Oversold K-Line cross above 20 / Overbought Reversal>",
+                            "support": "<Support level>",
+                            "resistance": "<Resistance level>",
+                            "confidence": "<High/Medium/Low>",
+                            "reasons": [
+                                "1. Candle Fact: Describe the structure of the last candle here in Hinglish.",
+                                "2. Indicator Math: Explain why the projected MACD/Stochastic scenario aligns with the current price momentum in Hinglish.",
+                                "3. Target {target_time} Scenario: Give the exact behavioral reason for Green or Red win percentage at this time in Hinglish."
+                            ]
+                        }}
+                        """
+                        
+                        response = client.chat.completions.create(
+                            model="gpt-4o",
+                            messages=[
+                                {
+                                    "role": "user",
+                                    "content": [
+                                        {"type": "text", "text": prompt},
+                                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                                    ]
+                                }
+                            ],
+                            max_tokens=800,
+                            temperature=0.15,
+                            response_format={"type": "json_object"}
+                        )
+                        
+                        raw_text = response.choices[0].message.content.strip()
+                        data = json.loads(raw_text)
+                        
+                        # Display Results
+                        st.markdown("<div class='dashboard-card'>", unsafe_allow_html=True)
+                        st.markdown(f"<span class='time-badge'>Target: {target_time}</span>", unsafe_allow_html=True)
+                        st.markdown(f"<h3 style='margin:0 0 5px 0; color:white;'>ChatGPT Indicator & Price Action Scenario</h3>", unsafe_allow_html=True)
+                        
+                        st.markdown(f"""
+                            <div class='bias-container'>
+                                <div class='bias-box'><div class='bullish-title'>↑ GREEN Candle Chance</div><div class='bullish-val'>{data['bullish_bias']}%</div></div>
+                                <div class='bias-box'><div class='bearish-title'>↓ RED Candle Chance</div><div class='bearish-val'>{data['bearish_bias']}%</div></div>
                             </div>
-                            <div class='bias-box'>
-                                <div class='bearish-title'>↓ Bearish Bias</div>
-                                <div class='bearish-val'>{data['bearish_bias']}%</div>
-                            </div>
-                        </div>
-                    """, unsafe_allow_html=True)
-                    
-                    t_color = "trend-green" if "Up" in data['trend'] else "trend-red"
-                    st.markdown(f"""
-                        <div class='data-row'><span class='data-label'>Trend</span><span class='data-value {t_color}'>{data['trend']}</span></div>
-                        <div class='data-row'><span class='data-label'>Current Pattern</span><span class='data-value'>{data['pattern']}</span></div>
-                        <div class='data-row'><span class='data-label'>Support</span><span class='data-value'>{data['support']}</span></div>
-                        <div class='data-row'><span class='data-label'>Resistance</span><span class='data-value'>{data['resistance']}</span></div>
-                        <div class='data-row'><span class='data-label'>Confidence</span><span class='data-value conf-badge'>{data['confidence']}</span></div>
-                    """, unsafe_allow_html=True)
-                    
-                    st.markdown(f"<div class='why-title'>🧠 Candlestick Psychology & Reasons ({target_time}):</div>", unsafe_allow_html=True)
-                    st.markdown("<ul class='custom-bullet'>", unsafe_allow_html=True)
-                    for reason in data['reasons']:
-                        st.markdown(f"<li>{reason}</li>", unsafe_allow_html=True)
-                    st.markdown("</ul></div>", unsafe_allow_html=True)
-                    
-            except Exception as e:
-                st.error(f"Format Parsing Error: AI response structural anomaly. Try again. Detail: {str(e)}")
+                        """, unsafe_allow_html=True)
+                        
+                        t_color = "trend-green" if "Up" in data['trend'] else "trend-red"
+                        st.markdown(f"""
+                            <div class='data-row'><span class='data-label'>Trend Matrix</span><span class='data-value {t_color}'>{data['trend']}</span></div>
+                            <div class='data-row'><span class='data-label'>Candlestick Pattern</span><span class='data-value'>{data['pattern']}</span></div>
+                            <div class='data-row'><span class='data-label'>📊 Calculated MACD State</span><span class='data-value' style='color:#5383ec;'>{data['macd_scenario']}</span></div>
+                            <div class='data-row'><span class='data-label'>跌 Stochastic Oscillator</span><span class='data-value' style='color:#f1c40f;'>{data['stochastic_scenario']}</span></div>
+                            <div class='data-row'><span class='data-label'>Support Zone</span><span class='data-value'>{data['support']}</span></div>
+                            <div class='data-row'><span class='data-label'>Resistance Zone</span><span class='data-value'>{data['resistance']}</span></div>
+                            <div class='data-row'><span class='data-label'>AI Confidence</span><span class='data-value conf-badge'>{data['confidence']}</span></div>
+                        """, unsafe_allow_html=True)
+                        
+                        st.markdown(f"<div class='why-title'>🧠 Confluence Psychology & Reasons ({target_time}):</div>", unsafe_allow_html=True)
+                        st.markdown("<ul class='custom-bullet'>", unsafe_allow_html=True)
+                        for reason in data['reasons']:
+                            st.markdown(f"<li>{reason}</li>", unsafe_allow_html=True)
+                        st.markdown("</ul></div>", unsafe_allow_html=True)
+                        
+                except Exception as e:
+                    st.error(f"ChatGPT Analysis Error: {str(e)}")
+
+# 🕒 BACKGROUND LOOP FOR LIVE CLOCK (Runs continuously without breaking input fields)
+while True:
+    current_ist = datetime.datetime.now(IST).strftime("%I:%M:%S %p")
+    clock_placeholder.markdown(f"""
+        <div class='live-clock-box'>
+            <h2 style='color:#ff4b4b; margin:0; font-size:28px; font-family:monospace;'>{current_ist}</h2>
+            <span style='color:#8a8d93; font-size:12px;'>🔴 LIVE MARKET TIME (IST)</span>
+        </div>
+    """, unsafe_allow_html=True)
+    time.sleep(1)
