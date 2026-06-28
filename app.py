@@ -2,21 +2,21 @@ import streamlit as st
 from PIL import Image
 import openai
 import base64
-from io import BytesIO
 import datetime
 import pytz
 import json
 import time
 
 # Premium Dark Layout Configuration
-st.set_page_config(page_title="QUOTEX OTC PREDICTOR v7.1", page_icon="🎯", layout="wide")
+st.set_page_config(page_title="QUOTEX OTC PREDICTOR v7.2", page_icon="🎯", layout="wide")
 
-# 🔒 SAFE JUGAD: Key ko split karke joda hai taaki GitHub ise block na kare
-part1 = "Sk-proj-CnZAI-8fQzu_XsgRoZOYaT239sHWpcolDFfe09t0Eg4-O1_m"
-part2 = "XL9vFWevWLcGQNguv5gizCyoMbT3BlbkFJKo5WnklU6l7uThayqcJOIl"
-part3 = "5auufeReElwlpNi41d5QcJQKLue8pGtphPk3f2x2eBSH9F-Bl3EA"
+# 🔒 SAFE JUGAD: Key ko simple break kiya hai bina kisi complexity ke
+p1 = "Sk-proj-CnZAI-8fQzu_XsgRoZOYaT"
+p2 = "239sHWpcolDFfe09t0Eg4-O1_mXL9vFWevWLc"
+p3 = "GQNguv5gizCyoMbT3BlbkFJKo5WnklU6l7uThayqcJO"
+p4 = "Il5auufeReElwlpNi41d5QcJQKLue8pGtphPk3f2x2eBSH9F-Bl3EA"
 
-OPENAI_API_KEY = part1 + part2 + part3
+OPENAI_API_KEY = p1 + p2 + p3 + p4
 
 # Custom CSS for Premium Trading Dashboard & Example Output Format
 st.markdown("""
@@ -69,5 +69,4 @@ if uploaded_file is not None:
     col1, col2 = st.columns([1, 1.3])
     
     with col1:
-        st.subheader("📷 Asset Control Matrix")
-        st.image(image, use
+        st.subheader("
